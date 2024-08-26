@@ -1,0 +1,713 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+ DATA PREPARATION 
+ 
+ 
+```{r}
+library(dplyr)
+library(tidyr)
+```
+
+
+```{r}
+movies<-read.csv("D:\\UMP\\SEMESTER 4\\DSP II\\movies.csv")
+```
+ 
+```{r}
+# View the first few rows of the dataset
+head(movies)
+
+# Check the structure of the dataset
+str(movies)
+
+# Summary statistics of the dataset
+summary(movies)
+```
+```{r}
+colSums(is.na(movies))
+```
+
+```{r}
+# Check for duplicates
+duplicates <- movies[duplicated(movies), ]
+
+duplicates
+```
+```{r}
+# Convert columns to appropriate data types
+movies_clean <- movies %>%
+  mutate(year = as.integer(year),
+         genre = as.factor(genre),
+         rating = as.factor(rating),
+         score= as.numeric(score),
+         votes= as.integer(votes),
+         budget=as.integer(budget),
+         gross=as.numeric(gross))
+```
+
+
+```{r}
+names(movies_clean)[names(movies_clean) == "runtime"] <- "duration"
+```
+
+```{r}
+write.csv(movies_clean, "C:/Users/IBM/Desktop/UMP/SEMESTER 4/DSP II/PROJECT DSP/movies_clean.csv", row.names = FALSE)
+```
+
+
+```{r}
+file.choose()
+```
+```{r}
+movies<-read.csv("C:\\Users\\IBM\\Desktop\\UMP\\SEMESTER 4\\DSP II\\PROJECT DSP\\movies_clean.csv")
+```
+
+relationship: top 5 movies based on votes
+
+```{r}
+# Load necessary libraries
+library(shiny)
+library(dplyr)
+library(ggplot2)
+
+# Load your dataset
+movies <- read.csv("C:/Users/IBM/Desktop/UMP/SEMESTER 4/DSP II/PROJECT DSP/movies_clean.csv")
+
+# Add "All" option to the genre choices
+genre_choices <- c("All", unique(movies$genre))
+
+# UI function
+ui <- fluidPage(
+  titlePanel("Top 5 Movies Based on Votes"),
+  sidebarLayout(
+    sidebarPanel(
+      # Add selectize input for selecting genre with "All" option
+      selectizeInput("genre", "Select Genre(s):", choices = genre_choices, selected = "All", multiple = TRUE)
+    ),
+    mainPanel(
+      plotOutput("topMoviesBar")
+    )
+  )
+)
+
+# Server function
+server <- function(input, output) {
+  output$topMoviesBar <- renderPlot({
+    # Filter movies based on selected genres
+    if ("All" %in% input$genre) {
+      filtered_movies <- movies
+    } else {
+      filtered_movies <- movies %>%
+        filter(genre %in% input$genre)
+    }
+    
+    # Get top 5 movies based on votes
+    top_movies <- filtered_movies %>%
+      arrange(desc(votes)) %>%
+      head(5)
+    
+    # Create bar chart
+    ggplot(top_movies, aes(x = reorder(name, votes), y = votes, fill = name)) +
+      geom_bar(stat = "identity") +
+      labs(title = if ("All" %in% input$genre) {
+             "Top 5 Movies Based on Votes (Overall)"
+           } else {
+             paste("Top 5 Movies Based on Votes in Selected Genres")
+           },
+           x = "Movie",
+           y = "Number of Votes",
+           fill = "Movie") +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      coord_flip() # Flip coordinates to make labels easier to read
+  })
+}
+
+# Run the Shiny app
+shinyApp(ui = ui, server = server)
+```
+
+
+Relationship:Genre + Movie(count)
+```{r}
+# Load necessary libraries
+library(shiny)
+library(dplyr)
+library(ggplot2)
+library(treemapify)
+
+# Load your dataset
+movies <- read.csv("C:/Users/IBM/Desktop/UMP/SEMESTER 4/DSP II/PROJECT DSP/movies_clean.csv")
+
+# UI function
+ui <- fluidPage(
+  titlePanel("Number of Movies by Genre"),
+  mainPanel(
+    plotOutput("genreTreemap")
+  )
+)
+
+# Server function
+server <- function(input, output) {
+  output$genreTreemap <- renderPlot({
+    # Count the number of movies per genre
+    genre_counts <- movies %>%
+      group_by(genre) %>%
+      summarise(num_movies = n()) %>%
+      arrange(desc(num_movies))
+    
+    # Create treemap
+    ggplot(genre_counts, aes(area = num_movies, fill = genre, label = genre)) +
+      geom_treemap() +
+      geom_treemap_text(colour = "white", place = "centre", grow = TRUE) +
+      labs(title = "Number of Movies by Genre") +
+      theme_minimal()
+  })
+}
+
+# Run the Shiny app
+shinyApp(ui = ui, server = server)
+```
+
+Relationship: Dot Plot (Rating + movie(count))
+
+```{r}
+library(shiny)
+library(ggplot2)
+library(dplyr)
+
+# Read data from CSV file
+movies <- read.csv("C:/Users/IBM/Desktop/UMP/SEMESTER 4/DSP II/PROJECT DSP/movies_clean.csv")
+
+# UI
+ui <- fluidPage(
+  titlePanel("Dot Plot of Movie Counts by Rating and Year"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("year", "Select Year:",
+                  choices = unique(movies$year),
+                  selected = unique(movies$year)[1])
+    ),
+    mainPanel(
+      plotOutput("dotPlot")
+    )
+  )
+)
+
+# Server logic
+server <- function(input, output) {
+  output$dotPlot <- renderPlot({
+    # Filter data based on selected year
+    filtered_data <- movies %>%
+      filter(year == input$year)
+    
+    # Aggregate movie counts by rating
+    rating_count <- filtered_data %>%
+      group_by(rating) %>%
+      summarise(count = n())
+    
+    # Plot dot plot
+    ggplot(rating_count, aes(x = rating, y = count)) +
+      geom_point(size = 3) +
+      labs(title = paste("Dot Plot of Movie Counts by Rating for", input$year),
+           x = "Rating", y = "Count of Movies") +
+      theme_minimal()
+  })
+}
+
+# Run the app
+shinyApp(ui = ui, server = server)
+
+
+```
+Realationship : Line Chart (Year+ movie(count))
+
+
+```{r}
+library(shiny)
+library(ggplot2)
+library(dplyr)
+
+# Read data from CSV file
+movies <- read.csv("C:/Users/IBM/Desktop/UMP/SEMESTER 4/DSP II/PROJECT DSP/movies_clean.csv")
+
+# UI
+ui <- fluidPage(
+  titlePanel("Number of Movies by Year"),
+  mainPanel(
+    plotOutput("linePlot")
+  )
+)
+
+# Server logic
+server <- function(input, output) {
+  output$linePlot <- renderPlot({
+    # Aggregate movie counts by year
+    year_count <- movies %>%
+      group_by(year) %>%
+      summarise(count = n())
+    
+    # Plot line chart with customized line color
+    ggplot(year_count, aes(x = year, y = count)) +
+      geom_line(color = "blue") +  # Change the line color here
+      geom_point() +
+      labs(,
+           x = "Year", y = "Count of Movies") +
+      theme_minimal()
+  })
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
+
+```
+
+Relationship: Scatter Plot
+
+```{r}
+library(shiny)
+library(ggplot2)
+library(dplyr)
+
+# Load data
+movies_data <- read.csv("C:/Users/IBM/Desktop/UMP/SEMESTER 4/DSP II/PROJECT DSP/movies_clean.csv")
+
+# Define UI
+ui <- fluidPage(
+  
+  titlePanel("Scatter Plot : Movie Budget vs Gross"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("company", "Select Company:", choices = unique(movies_data$company)),
+      checkboxInput("show_trendline", "Show Trend Line", value = TRUE),
+    ),
+    mainPanel(
+      plotOutput("scatterplot")
+    )
+  )
+)
+
+# Define server logic
+server <- function(input, output) {
+  
+  output$scatterplot <- renderPlot({
+    filtered_data <- movies_data %>%
+      filter(company == input$company) %>%
+      mutate(budget_scaled = budget / 100000,
+             gross_scaled = gross / 100000)
+    
+    splot <- ggplot(filtered_data, aes(x = budget_scaled, y = gross_scaled)) +
+      geom_point(color = "maroon") +
+      labs(x = "Budget", y = "Gross") +
+      ggtitle("Budget vs Gross")
+    
+    if (input$show_trendline) {
+      splot <- splot + geom_smooth(method = "lm", se = FALSE, color = "blue")
+    }
+  
+    print(splot)
+  })
+}
+
+shinyApp(ui = ui, server = server)   
+
+```
+
+Relationship: top 5 comedy
+
+```{r}
+library(shiny)
+library(ggplot2)
+library(dplyr)
+
+# Load data
+movies_data <- read.csv("C:/Users/IBM/Desktop/UMP/SEMESTER 4/DSP II/PROJECT DSP/movies_clean.csv")
+
+# Filter the top 5 comedy movies based on gross earnings
+top_5_comedies <- movies_data %>% filter(genre == 'Comedy') %>% arrange(desc(gross)) %>% head(5)
+
+# Define custom colors for each movie
+custom_colors <- c("skyblue", "salmon", "green", "orange", "purple")
+
+# Define UI
+ui <- fluidPage(
+  titlePanel("Top 5 Comedy Movies Based on Gross Earnings"),
+    mainPanel(
+      plotOutput("grossPlot")
+    )
+  )
+
+
+# Define server logic
+server <- function(input, output) {
+  output$grossPlot <- renderPlot({
+    ggplot(top_5_comedies, aes(x = reorder(name, -gross), y = gross / 1000, fill = name)) + 
+      geom_bar(stat = "identity") +
+      scale_fill_manual(values = custom_colors) + # set custom colors
+      labs(title = "Top 5 Comedy Movies Based on Gross Earnings",
+           x = "Movie",
+           y = "Gross Earnings") +
+      scale_y_continuous(labels = scales::comma_format(scale = 1000)) + # format y-axis labels
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
+
+
+```
+Relationship: Top 5 star based on Score
+Filter : year
+```{r}
+library(shiny)
+library(dplyr)
+library(ggplot2)
+library(readr)
+
+df <- read_csv("C:/Users/IBM/Desktop/UMP/SEMESTER 4/DSP II/PROJECT DSP/movies_clean.csv")
+
+# Define UI for the application
+ui <- fluidPage(
+  titlePanel("Top 5 Stars by Score"),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("year", "Select Year:", choices = unique(df$year))
+    ),
+    mainPanel(
+      plotOutput("topStarsPlot")
+    )
+  )
+)
+
+# Define server logic required to filter data and display the top 5 stars
+server <- function(input, output) {
+  output$topStarsPlot <- renderPlot({
+    filtered_movies <- df %>%
+      filter(year == input$year)
+    
+    star_scores <- filtered_movies %>%
+      group_by(star) %>%
+      summarize(total_score = sum(score, na.rm = TRUE), count = n()) %>%
+      arrange(desc(total_score))
+    
+    top_stars <- star_scores %>%
+      top_n(5, total_score)
+    
+    ggplot(top_stars, aes(x = reorder(star, total_score), y = total_score)) +
+      geom_bar(stat = "identity", fill = "steelblue") +
+      geom_text(aes(label = total_score), hjust = -0.1, color = "black", size = 3) +
+      coord_flip() +
+      labs(title = paste("Top 5 Stars by Total Score in", input$year), 
+           x = "Star",
+           y = "Total Score") +
+      theme_minimal()
+  })
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
+
+
+```
+Relationship: Action top 5
+
+
+```{r}
+
+library(shiny)
+library(ggplot2)
+library(dplyr)
+
+# Read data from CSV file
+movies_df <- read.csv("C:/Users/IBM/Desktop/UMP/SEMESTER 4/DSP II/PROJECT DSP/movies_clean.csv")
+
+# UI
+ui <- fluidPage(
+  titlePanel("Top 5 Action Movies by Gross"),
+  mainPanel(
+    plotOutput("barPlot")
+  )
+)
+
+# Server logic
+server <- function(input, output) {
+    
+  output$barPlot <- renderPlot({
+    # Filter the dataframe to include only Action movies
+    action_movies_df <- movies_df %>% 
+      filter(genre == "Action")%>%
+      mutate(gross_scaled = gross / 100000)
+    
+    # Select the top 5 action movies by score
+    top_5_action_movies <- action_movies_df %>% 
+      arrange(desc(score)) %>% 
+      head(5)
+    
+    # Plot the top action movies based on gross
+    ggplot(top_5_action_movies, aes(x = reorder(name, -gross), y = gross/1000)) +
+      geom_bar(stat = "identity", fill = "skyblue") +
+      geom_text(aes(label = score), vjust = -0.3) +
+      labs(title = "Top 5 Action Movies by Gross", 
+           x = "Movie", y = "Gross (in billions)") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
+
+```
+
+
+DASHBOARD
+
+```{r}
+library(shiny)
+library(shinydashboard)
+library(ggplot2)
+library(dplyr)
+library(treemapify)
+library(readr)
+
+# Read data from CSV file
+movies <- read.csv("C:/Users/IBM/Desktop/UMP/SEMESTER 4/DSP II/PROJECT DSP/movies_clean.csv")
+
+# UI
+ui <- dashboardPage(
+  dashboardHeader(title = "Movie Analysis Dashboard"),
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Home", tabName = "home", icon = icon("home")),  # New menu item for Home
+      menuItem("Visualizations", tabName = "visualizations", icon = icon("chart-bar"),
+               menuSubItem("Number of Movies by Year", tabName = "tab1"),
+               menuSubItem("Number of Movies by Genre", tabName = "tab2"),
+               menuSubItem("Top 5 Comedy Movies by Gross", tabName = "tab3"),
+               menuSubItem("Top 5 Action Movies by Gross", tabName = "tab4"),
+               menuSubItem("Movie Budget vs Gross", tabName = "tab5"),
+               menuSubItem("Top 5 Stars by Score", tabName = "tab6"),
+               menuSubItem("Movie Counts by Rating and Year", tabName = "tab7"),
+               menuSubItem("Top 5 Movies Based on Votes", tabName = "tab8")
+      )
+    )
+  ),
+  dashboardBody(
+    tabItems(
+      tabItem(tabName = "home",
+              fluidRow(
+                column(12, imageOutput("coverPage"))
+              )
+      ),
+      tabItem(tabName = "tab1",
+              fluidRow(
+                column(12, plotOutput("linePlot"))
+              )
+      ),
+      tabItem(tabName = "tab2",
+              fluidRow(
+                column(12, plotOutput("genreTreemap"))
+              )
+      ),
+      tabItem(tabName = "tab3",
+              fluidRow(
+                column(12, plotOutput("grossPlot"))
+              )
+      ),
+      tabItem(tabName = "tab4",
+              fluidRow(
+                column(12, plotOutput("barPlot"))
+              )
+      ),
+      tabItem(tabName = "tab5",
+              fluidRow(
+                column(6, selectizeInput("company", "Select Company:", choices = unique(movies$company), options = list(maxOptions = 1000)),
+                       checkboxInput("show_trendline", "Show Trend Line", value = TRUE), plotOutput("scatterplot"))
+              )
+      ),
+      tabItem(tabName = "tab6",
+              fluidRow(
+                column(12, selectInput("year", "Select Year:", choices = unique(movies$year)),
+                       plotOutput("topStarsPlot"))
+              )
+      ),
+      tabItem(tabName = "tab7",
+              fluidRow(
+                column(12, selectInput("year", "Select Year:", choices = unique(movies$year), selected = unique(movies$year)[1]),
+                       plotOutput("dotPlot"))
+              )
+      ),
+      tabItem(tabName = "tab8",
+              fluidRow(
+                column(12, selectizeInput("genre", "Select Genre(s):", choices = genre_choices, selected = "All", multiple = TRUE), plotOutput("topMoviesBar"))
+              )
+      )
+    )
+  )
+)
+
+# Server logic
+server <- function(input, output) {
+  # Home tab: Display cover image
+  output$coverPage <- renderImage({
+    list(
+      src = "C:/Users/IBM/Documents/R LANGUAGE/homedsp.png",
+      contentType = 'homedsp.png',
+      width = "100%",
+      height = "auto"
+    )
+  }, deleteFile = FALSE)
+  
+  # Number of Movies by Year
+  output$linePlot <- renderPlot({
+    year_count <- movies %>%
+      group_by(year) %>%
+      summarise(count = n())
+    
+    ggplot(year_count, aes(x = year, y = count)) +
+      geom_line(color = "blue") +
+      geom_point() +
+      labs(title = "Number of Movies by Year", x = "Year", y = "Count of Movies") +
+      theme_minimal()
+  })
+  
+  # Number of Movies by Genre
+  output$genreTreemap <- renderPlot({
+    genre_counts <- movies %>%
+      group_by(genre) %>%
+      summarise(num_movies = n()) %>%
+      arrange(desc(num_movies))
+    
+    ggplot(genre_counts, aes(area = num_movies, fill = genre, label = genre)) +
+      geom_treemap() +
+      geom_treemap_text(colour = "white", place = "centre", grow = TRUE) +
+      labs(title = "Number of Movies by Genre") +
+      theme_minimal()
+  })
+  
+  # Top 5 Comedy Movies Based on Gross Earnings
+  output$grossPlot <- renderPlot({
+    top_5_comedies <- movies %>%
+      filter(genre == 'Comedy') %>%
+      arrange(desc(gross)) %>%
+      head(5)
+    
+    custom_colors <- c("skyblue", "salmon", "green", "orange", "purple")
+    
+    ggplot(top_5_comedies, aes(x = reorder(name, -gross), y = gross / 1000, fill = name)) +
+      geom_bar(stat = "identity") +
+      scale_fill_manual(values = custom_colors) +
+      labs(title = "Top 5 Comedy Movies by Gross", x = "Movie", y = "Gross Earnings") +
+      scale_y_continuous(labels = scales::comma_format(scale = 1000)) +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
+  
+  # Top 5 Action Movies by Gross
+  output$barPlot <- renderPlot({
+    action_movies_df <- movies %>%
+      filter(genre == "Action") %>%
+      mutate(gross_scaled = gross / 100000)
+    
+    top_5_action_movies <- action_movies_df %>%
+      arrange(desc(score)) %>%
+      head(5)
+    
+    ggplot(top_5_action_movies, aes(x = reorder(name, -gross), y = gross / 1000)) +
+      geom_bar(stat = "identity", fill = "skyblue") +
+      geom_text(aes(label = score), vjust = -0.3) +
+      labs(title = "Top 5 Action Movies by Gross", x = "Movie", y = "Gross (in billions)") +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  })
+  
+  # Scatter Plot: Movie Budget vs Gross
+  output$scatterplot <- renderPlot({
+    filtered_data <- movies %>% filter(company == input$company) %>% mutate(budget_scaled = budget / 100000, gross_scaled = gross / 100000)
+    splot <- ggplot(filtered_data, aes(x = budget_scaled, y = gross_scaled)) +
+      geom_point(color = "maroon") +
+      labs(x = "Budget (in millions)", y = "Gross (in millions)", title = "Budget vs Gross")
+    if (input$show_trendline) {
+      splot <- splot + geom_smooth(method = "lm", se = FALSE, color = "blue")
+    }
+    splot
+  })
+  
+  # Top 5 Stars by Score
+  output$topStarsPlot <- renderPlot({
+    filtered_movies <- movies %>%
+      filter(year == input$year)
+    
+    star_scores <- filtered_movies %>%
+      group_by(star) %>%
+      summarise(total_score = sum(score, na.rm = TRUE), count = n()) %>%
+      arrange(desc(total_score))
+    
+    top_stars <- star_scores %>%
+      top_n(5, total_score)
+    
+    ggplot(top_stars, aes(x = reorder(star, total_score), y = total_score)) +
+      geom_bar(stat = "identity", fill = "steelblue") +
+      geom_text(aes(label = total_score), hjust = -0.1, color = "black", size = 3) +
+      coord_flip() +
+      labs(title = paste("Top 5 Stars by Total Score in", input$year), 
+           x = "Star",
+           y = "Total Score") +
+      theme_minimal()
+  })
+  
+  # Dot Plot of Movie Counts by Rating and Year
+  output$dotPlot <- renderPlot({
+    filtered_data <- movies %>%
+      filter(year == input$year)
+    
+    rating_count <- filtered_data %>%
+      group_by(rating) %>%
+      summarise(count = n())
+    
+    ggplot(rating_count, aes(x = rating, y = count)) +
+      geom_point(size = 3) +
+      labs(title = paste("Dot Plot of Movie Counts by Rating for", input$year),
+           x = "Rating", y = "Count of Movies") +
+      theme_minimal()
+  })
+  
+  # Top 5 Movies Based on Votes
+  output$topMoviesBar <- renderPlot({
+    if ("All" %in% input$genre) {
+      filtered_movies <- movies
+    } else {
+      filtered_movies <- movies %>%
+        filter(genre %in% input$genre)
+    }
+    
+    top_movies <- filtered_movies %>%
+      arrange(desc(votes)) %>%
+      head(5)
+    
+    ggplot(top_movies, aes(x = reorder(name, votes), y = votes, fill = name)) +
+      geom_bar(stat = "identity") +
+      labs(title = if ("All" %in% input$genre) {
+             "Top 5 Movies Based on Votes (Overall)"
+           } else {
+             paste("Top 5 Movies Based on Votes in Selected Genres")
+           },
+           x = "Movie",
+           y = "Number of Votes",
+           fill = "Movie") +
+      theme_minimal() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      coord_flip()
+  })
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
+
+```
+
+
+
