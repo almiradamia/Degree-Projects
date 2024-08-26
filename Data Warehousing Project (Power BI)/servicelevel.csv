@@ -1,0 +1,104 @@
+country,residence_type,service_type,time_period,coverage,population,service_level
+Sudan,total,Sanitation,2018.0,36.6727,15402187.7288,At least basic
+Sudan,rural,Sanitation,2018.0,24.2341,6652198.0443,At least basic
+Sudan,urban,Sanitation,2018.0,60.1402,8749989.9766,At least basic
+Sudan,total,Drinking water,2018.0,60.4671,25395606.3873,At least basic
+Sudan,rural,Drinking water,2018.0,54.4624,14949776.6469,At least basic
+Sudan,urban,Drinking water,2018.0,71.796,10445830.0651,At least basic
+Sudan,total,Hygiene,2018.0,16.0087,6723507.143,Basic service
+Sudan,total,Hygiene,2018.0,26.3621,11071824.6133,Limited service
+Sudan,total,Sanitation,2018.0,8.3345,3500420.6191,Limited service
+Sudan,rural,Sanitation,2018.0,6.3995,1756646.2016,Limited service
+Sudan,urban,Sanitation,2018.0,11.9853,1743774.4742,Limited service
+Sudan,total,Drinking water,2018.0,26.8768,11287982.1623,Limited service
+Sudan,rural,Drinking water,2018.0,28.1097,7716036.838,Limited service
+Sudan,urban,Drinking water,2018.0,24.5506,3571945.4265,Limited service
+Sudan,total,Hygiene,2018.0,57.6292,24203726.508,No handwashing facility
+Sudan,total,Sanitation,2018.0,21.4077,8991009.4779,Open defecation
+Sudan,rural,Sanitation,2018.0,28.8269,7912920.0451,Open defecation
+Sudan,urban,Sanitation,2018.0,7.4099,1078089.4446,Open defecation
+Sudan,total,Drinking water,2018.0,4.1331,1735860.6876,Surface water
+Sudan,rural,Drinking water,2018.0,5.8447,1604363.8642,Surface water
+Sudan,urban,Drinking water,2018.0,0.9038,131496.8226,Surface water
+Sudan,total,Sanitation,2018.0,33.5851,14105441.1742,Unimproved
+Sudan,rural,Sanitation,2018.0,40.5395,11127981.7091,Unimproved
+Sudan,urban,Sanitation,2018.0,20.4646,2977460.1046,Unimproved
+Sudan,total,Drinking water,2018.0,8.5231,3579609.7628,Unimproved
+Sudan,rural,Drinking water,2018.0,11.5832,3179568.6508,Unimproved
+Sudan,urban,Drinking water,2018.0,2.7496,400041.6858,Unimproved
+Sudan,total,Sanitation,2019.0,36.7783,15900011.8975,At least basic
+Sudan,rural,Sanitation,2019.0,24.2341,6816695.2166,At least basic
+Sudan,urban,Sanitation,2019.0,60.1402,9083317.1661,At least basic
+Sudan,total,Drinking water,2019.0,61.6057,26633413.4279,At least basic
+Sudan,rural,Drinking water,2019.0,55.7759,15688925.9673,At least basic
+Sudan,urban,Drinking water,2019.0,72.463,10944488.2321,At least basic
+Sudan,total,Hygiene,2019.0,14.26,6164896.4618,Basic service
+Sudan,total,Sanitation,2019.0,8.3509,3610287.6984,Limited service
+Sudan,rural,Sanitation,2019.0,6.3995,1800084.9764,Limited service
+Sudan,urban,Sanitation,2019.0,11.9853,1810202.8297,Limited service
+Sudan,total,Drinking water,2019.0,27.3871,11839995.363,Limited service
+Sudan,rural,Drinking water,2019.0,28.7876,8097534.4028,Limited service
+Sudan,urban,Drinking water,2019.0,24.7787,3742461.2924,Limited service
+Sudan,total,Sanitation,2019.0,19.3502,8365515.7225,Open defecation
+Sudan,rural,Sanitation,2019.0,26.2315,7378523.0756,Open defecation
+Sudan,urban,Sanitation,2019.0,6.5348,986992.8656,Open defecation
+Sudan,total,Drinking water,2019.0,3.6641,1584052.4705,Surface water
+Sudan,rural,Drinking water,2019.0,5.2079,1464909.2915,Surface water
+Sudan,urban,Drinking water,2019.0,0.7888,119143.2197,Surface water
+Sudan,total,Sanitation,2019.0,35.5206,15356277.6817,Unimproved
+Sudan,rural,Sanitation,2019.0,43.135,12133226.7314,Unimproved
+Sudan,urban,Sanitation,2019.0,21.3397,3223051.1387,Unimproved
+Sudan,total,Drinking water,2019.0,7.3432,3174631.7387,Unimproved
+Sudan,rural,Drinking water,2019.0,10.2286,2877160.3385,Unimproved
+Sudan,urban,Drinking water,2019.0,1.9695,297471.2559,Unimproved
+Sudan,total,Sanitation,2020.0,36.8921,16395021.1464,At least basic
+Sudan,rural,Sanitation,2020.0,24.2341,6973090.4456,At least basic
+Sudan,urban,Sanitation,2020.0,60.1402,9421931.2826,At least basic
+Sudan,total,Drinking water,2020.0,62.7441,27883787.8323,At least basic
+Sudan,rural,Drinking water,2020.0,57.0894,16426820.8027,At least basic
+Sudan,urban,Drinking water,2020.0,73.1299,11456968.0522,At least basic
+Sudan,total,Hygiene,2020.0,12.5113,5560078.52,Basic service
+Sudan,total,Sanitation,2020.0,8.3687,3719068.9471,Limited service
+Sudan,rural,Sanitation,2020.0,6.3995,1841384.2708,Limited service
+Sudan,urban,Sanitation,2020.0,11.9853,1877684.8102,Limited service
+Sudan,total,Drinking water,2020.0,27.8937,12396087.4909,Limited service
+Sudan,rural,Drinking water,2020.0,29.4656,8478384.4895,Limited service
+Sudan,urban,Drinking water,2020.0,25.0067,3917703.4644,Limited service
+Sudan,total,Sanitation,2020.0,17.2988,7687682.205,Open defecation
+Sudan,rural,Sanitation,2020.0,23.636,6800988.7576,Open defecation
+Sudan,urban,Sanitation,2020.0,5.6598,886693.7457,Open defecation
+Sudan,total,Drinking water,2020.0,3.1972,1420855.7477,Surface water
+Sudan,rural,Drinking water,2020.0,4.5711,1315281.2668,Surface water
+Sudan,urban,Drinking water,2020.0,0.6739,105574.5364,Surface water
+Sudan,total,Sanitation,2020.0,37.4404,16638713.7016,Unimproved
+Sudan,rural,Sanitation,2020.0,45.7304,13158418.526,Unimproved
+Sudan,urban,Sanitation,2020.0,22.2147,3480295.1615,Unimproved
+Sudan,total,Drinking water,2020.0,6.165,2739754.9291,Unimproved
+Sudan,rural,Drinking water,2020.0,8.874,2553395.441,Unimproved
+Sudan,urban,Drinking water,2020.0,1.1895,186358.947,Unimproved
+Sudan,total,Drinking water,2021.0,63.882,29166738.1881,At least basic
+Sudan,rural,Drinking water,2021.0,58.4028,17174193.442,At least basic
+Sudan,urban,Drinking water,2021.0,73.7968,11992545.2946,At least basic
+Sudan,total,Hygiene,2021.0,10.7626,4913893.7934,Basic service
+Sudan,total,Drinking water,2021.0,28.3963,12964969.9182,Limited service
+Sudan,rural,Drinking water,2021.0,30.1435,8864126.3607,Limited service
+Sudan,urban,Drinking water,2021.0,25.2348,4100843.7864,Limited service
+Sudan,total,Drinking water,2021.0,2.7329,1247759.5705,Surface water
+Sudan,rural,Drinking water,2021.0,3.9343,1156930.2135,Surface water
+Sudan,urban,Drinking water,2021.0,0.5589,90829.3754,Surface water
+Sudan,total,Drinking water,2021.0,4.9888,2277734.3233,Unimproved
+Sudan,rural,Drinking water,2021.0,7.5194,2211183.9838,Unimproved
+Sudan,urban,Drinking water,2021.0,0.4095,66549.5436,Unimproved
+Sudan,total,Drinking water,2022.0,64.9201,30430768.544,At least basic
+Sudan,rural,Drinking water,2022.0,59.7163,17926913.526,At least basic
+Sudan,urban,Drinking water,2022.0,74.1888,12503854.3968,At least basic
+Sudan,total,Hygiene,2022.0,10.7626,5044874.6313,Basic service
+Sudan,total,Drinking water,2022.0,28.8609,13528314.1845,Limited service
+Sudan,rural,Drinking water,2022.0,30.8214,9252628.2115,Limited service
+Sudan,urban,Drinking water,2022.0,25.3688,4275685.6322,Limited service
+Sudan,total,Drinking water,2022.0,2.2709,1064450.4591,Surface water
+Sudan,rural,Drinking water,2022.0,3.2975,989900.4481,Surface water
+Sudan,urban,Drinking water,2022.0,0.4423,74549.971,Surface water
+Sudan,total,Drinking water,2022.0,3.9482,1850670.8124,Unimproved
+Sudan,rural,Drinking water,2022.0,6.1648,1850671.8144,Unimproved
+Sudan,urban,Drinking water,2022.0,0.0,0.0,Unimproved
